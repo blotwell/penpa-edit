@@ -7698,7 +7698,17 @@ class Puzzle_penrose_P3 extends Puzzle {
                     point[edge[e]].use = 1;
                 }
             }
-
+            for (let e = 0; e < 4; e++) {
+                // Update mapping edge -> adjacent edge
+                let ee = edge[e];
+                let ef = edge[(e + 2) % 4];
+                if (point[ee].adjacent.indexOf(ef) == -1) {
+                    point[ee].adjacent = point[ee].adjacent.concat([ef])
+                }
+                if (point[ef].adjacent.indexOf(ee) == -1) {
+                    point[ef].adjacent = point[ef].adjacent.concat([ee])
+                }
+            }
             // Create face
             type = 0;
             point[k] = new Point(xcen, ycen, type, adja, surround, use, edge);
@@ -7732,7 +7742,7 @@ class Puzzle_penrose_P3 extends Puzzle {
             }
         }
 
-        this.point = this.point_connect_corners(this.create_corners(this.fix_points(point), 0.25, this.fix_points(point).length + 1)[0]);
+        this.point = this.point_connect_corners(this.create_corners(point, 0.25, point.length + 1)[0]);
     }
 
     reset_frame() {
